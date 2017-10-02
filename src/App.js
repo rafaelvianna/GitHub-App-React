@@ -11,13 +11,18 @@ class App extends Component {
       starred: []
     }
   }
+  getGitHubApiUrl(username, type){
+    const internalUsername = username ? `/${username}` : ''
+    const internalType = type ? `/${type}` : ''
+    return `https://api.github.com/users${internalUsername}${internalType}`
+  }
 
   handleSearch(e) {
     const value = e.target.value
     const keyCode = e.which || e.keyCode
     const ENTER = 13
     if(keyCode === ENTER) {
-      ajax().get(`https://api.github.com/users/${value}`)
+      ajax().get(this.getGitHubApiUrl(value))
       .then((result) => {
         console.log(result)
         this.setState({
@@ -28,22 +33,26 @@ class App extends Component {
             repos: result.public_repos,
             followers: result.followers,
             following: result.following
-          }
+          },
+          repos: [],
+          starred: []
         })
-        // username: 'Rafael Vianna',
-        // photo: 'http://revistaberro.com/wp-content/uploads/2015/08/reprodu%C3%A7%C3%A3o-600x350.jpg',
-        // login: 'RafaelVianna',
-        // repos: 12,
-        // followers: 10,
-        // following: 10
       })
     }
   }
-  getRepos() {
-    console.log('repositorios')
-  }
-  getStarred() {
-    console.log('starred')
+  getRepos(type) {
+    const username = this.state.userinfo.login
+    ajax().get(this.getGitHubApiUrl(username, type))
+    .then((result) => {
+      this.setState({
+        [type]: result.map((repo) => {
+          return {
+            name: repo.name,
+            link: repo.html_url
+          }
+        })
+      })
+    })
   }
 
   render() {
@@ -54,8 +63,8 @@ class App extends Component {
         starred={this.state.starred}
         handleSearch={(e) => this.handleSearch(e)}
         clickUserInfo={(e) => this.clickUserInfo(e)}
-        getRepos={() => this.getRepos()}
-        getStarred={() => this.getStarred()}/>
+        getRepos={() => this.getRepos('repos')}
+        getStarred={() => this.getRepos('starred')}/>
     );
   }
 }
