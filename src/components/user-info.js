@@ -6,7 +6,7 @@ const UserInfo = ({userinfo}) => (
     <img src={userinfo.photo} />
     <h1>
       <a href={`https://api.github.com/users/${userinfo.login}`}>
-        {userinfo.username}
+        {userinfo.name}
       </a>
     </h1>
 
@@ -20,7 +20,7 @@ const UserInfo = ({userinfo}) => (
 
 UserInfo.propTypes = {
     userinfo: propTypes.shape({
-      username: propTypes.string.isRequired,
+      name: propTypes.string.isRequired,
       photo: propTypes.string.isRequired,
       login: propTypes.string.isRequired,
       repos: propTypes.number.isRequired,

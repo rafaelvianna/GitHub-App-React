@@ -39,6 +39,12 @@ class App extends Component {
       })
     }
   }
+  getRepos() {
+    console.log('repositorios')
+  }
+  getStarred() {
+    console.log('starred')
+  }
 
   render() {
     return (
@@ -46,7 +52,10 @@ class App extends Component {
         userinfo={this.state.userinfo}
         repos={this.state.repos}
         starred={this.state.starred}
-        handleSearch={(e) => this.handleSearch(e)}/>
+        handleSearch={(e) => this.handleSearch(e)}
+        clickUserInfo={(e) => this.clickUserInfo(e)}
+        getRepos={() => this.getRepos()}
+        getStarred={() => this.getStarred()}/>
     );
   }
 }
